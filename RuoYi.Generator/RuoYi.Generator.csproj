@@ -23,12 +23,13 @@
   <ItemGroup>
     <PackageReference Include="RazorEngineCore" Version="2024.4.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
+    <PackageReference Include="RuoYi.Framework" Version="1.0.0" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RuoYi.Common\RuoYi.Common.csproj" />
     <ProjectReference Include="..\RuoYi.Data\RuoYi.Data.csproj" />
-    <ProjectReference Include="..\RuoYi.Framework\RuoYi.Framework.csproj" />
     <ProjectReference Include="..\RuoYi.System\RuoYi.System.csproj" />
   </ItemGroup>
 

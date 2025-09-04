@@ -5,6 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageId>RuoYi.Framework</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>RuoYi Team</Authors>
+    <Company>RuoYi</Company>
+    <Description>Core framework for RuoYi.NET applications</Description>
+    <RepositoryUrl>https://github.com/your/repository</RepositoryUrl>
+    <PackageTags>RuoYi;Framework</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageOutputPath>../nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

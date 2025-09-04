@@ -8,12 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Quartz" Version="3.13.0" />
+    <PackageReference Include="RuoYi.Framework" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RuoYi.Common\RuoYi.Common.csproj" />
     <ProjectReference Include="..\RuoYi.Data\RuoYi.Data.csproj" />
-    <ProjectReference Include="..\RuoYi.Framework\RuoYi.Framework.csproj" />
     <ProjectReference Include="..\RuoYi.System\RuoYi.System.csproj" />
   </ItemGroup>
 

@@ -9,7 +9,10 @@
   <ItemGroup>
     <ProjectReference Include="..\RuoYi.Common\RuoYi.Common.csproj" />
     <ProjectReference Include="..\RuoYi.Data\RuoYi.Data.csproj" />
-    <ProjectReference Include="..\RuoYi.Framework\RuoYi.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RuoYi.Framework" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
