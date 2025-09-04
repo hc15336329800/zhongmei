@@ -1,10 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- 多目标框架 -->
+    <TargetFrameworks>net8.0</TargetFrameworks>
+
+    <!-- 版本号（每次发布改这里即可，也可用 -p:PackageVersion=1.x.x 临时覆盖） -->
+    <Version>1.1.0</Version>
+
+    <!-- 自动打包 -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <!-- 不带调试符号、不带源码 -->
     <IncludeSymbols>false</IncludeSymbols>
     <IncludeSource>false</IncludeSource>
     <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+
+    <!-- 只输出 dll，不要 xml/json/pdb 等 -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>.dll</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <!-- 包元信息（可选但推荐） -->
+    <Authors>ry</Authors>
+    <Company>ry</Company>
+    <PackageProjectUrl>https://your-private-repo-url</PackageProjectUrl>
+    <RepositoryUrl>https://your-private-repo-url</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
 
