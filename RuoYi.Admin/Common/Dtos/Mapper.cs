@@ -1,4 +1,4 @@
-﻿namespace RuoYi.Admin
+namespace RuoYi.Admin
 {
     public class Mapper : IRegister
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +9,7 @@ using SqlSugar;
 
 namespace ZM.Device.Repositories
 {
-    /// <summary>
-    /// 设别和类型中间表
-    /// </summary>
-    public class DeviceManagementTypeRepository : BaseRepository<DeviceManagementType,DeviceManagementTypeDto>
+    public class DeviceManagementTypeRepository : BaseRepository<DeviceManagementType, DeviceManagementTypeDto>
     {
         public DeviceManagementTypeRepository(ISqlSugarRepository<DeviceManagementType> sqlSugarRepository)
         {
@@ -26,13 +23,7 @@ namespace ZM.Device.Repositories
 
         public override ISugarQueryable<DeviceManagementTypeDto> DtoQueryable(DeviceManagementTypeDto dto)
         {
-            return Repo.AsQueryable().Select(t => new DeviceManagementTypeDto
-            {
-                DeviceId = t.DeviceId,
-                DeviceTypeId = t.DeviceTypeId,
-                TenantId = t.TenantId
-            });
+            return Repo.AsQueryable().Select(t => new DeviceManagementTypeDto { DeviceId = t.DeviceId, DeviceTypeId = t.DeviceTypeId, TenantId = t.TenantId });
         }
-
     }
 }

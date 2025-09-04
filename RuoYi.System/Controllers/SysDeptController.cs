@@ -6,26 +6,18 @@ using RuoYi.System.Services;
 
 namespace RuoYi.System.Controllers
 {
-    /// <summary>
-    /// 部门表
-    /// </summary>
     [ApiDescriptionSettings("System")]
     [Route("system/dept")]
     public class SysDeptController : ControllerBase
     {
         private readonly ILogger<SysDeptController> _logger;
         private readonly SysDeptService _sysDeptService;
-
-        public SysDeptController(ILogger<SysDeptController> logger,
-            SysDeptService sysDeptService)
+        public SysDeptController(ILogger<SysDeptController> logger, SysDeptService sysDeptService)
         {
             _logger = logger;
             _sysDeptService = sysDeptService;
         }
 
-        /// <summary>
-        /// 查询部门表列表
-        /// </summary>
         [HttpGet("list")]
         [AppAuthorize("system:dept:list")]
         public async Task<AjaxResult> GetSysDeptList([FromQuery] SysDeptDto dto)
@@ -34,9 +26,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 查询部门表列表
-        /// </summary>
         [HttpGet("list/exclude/{deptId}")]
         [AppAuthorize("system:dept:list")]
         public async Task<AjaxResult> ExcludeChildList(long? deptId)
@@ -47,9 +36,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 获取 部门表 详细信息
-        /// </summary>
         [HttpGet("{deptId}")]
         [AppAuthorize("system:dept:query")]
         public async Task<AjaxResult> Get(long deptId)
@@ -59,9 +45,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 新增 部门表
-        /// </summary>
         [HttpPost("")]
         [AppAuthorize("system:dept:add")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -72,13 +55,11 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error($"新增部门'{dept.DeptName} '失败，部门名称已存在");
             }
+
             var data = await _sysDeptService.InsertDeptAsync(dept);
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 修改 部门表
-        /// </summary>
         [HttpPut("")]
         [AppAuthorize("system:dept:edit")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -99,13 +80,11 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error("该部门包含未停用的子部门！");
             }
+
             var data = await _sysDeptService.UpdateDeptAsync(dept);
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 删除 部门表
-        /// </summary>
         [HttpDelete("{deptId}")]
         [AppAuthorize("system:dept:remove")]
         [Log(Title = "部门管理", BusinessType = BusinessType.DELETE)]
@@ -115,10 +94,12 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error("存在下级部门,不允许删除");
             }
+
             if (await _sysDeptService.CheckDeptExistUserAsync(deptId))
             {
                 return AjaxResult.Error("部门存在用户,不允许删除");
             }
+
             await _sysDeptService.CheckDeptDataScopeAsync(deptId);
             var data = await _sysDeptService.DeleteDeptByIdAsync(deptId);
             return AjaxResult.Success(data);

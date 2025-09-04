@@ -6,26 +6,18 @@ using SqlSugar;
 
 namespace RuoYi.System.Controllers
 {
-    /// <summary>
-    /// 操作日志记录
-    /// </summary>
     [Route("monitor/operlog")]
     [ApiDescriptionSettings("Monitor")]
     public class SysOperLogController : ControllerBase
     {
         private readonly ILogger<SysOperLogController> _logger;
         private readonly SysOperLogService _sysOperLogService;
-
-        public SysOperLogController(ILogger<SysOperLogController> logger,
-            SysOperLogService sysOperLogService)
+        public SysOperLogController(ILogger<SysOperLogController> logger, SysOperLogService sysOperLogService)
         {
             _logger = logger;
             _sysOperLogService = sysOperLogService;
         }
 
-        /// <summary>
-        /// 查询操作日志记录列表
-        /// </summary>
         [HttpGet("list")]
         [AppAuthorize("system:log:list")]
         public async Task<SqlSugarPagedList<SysOperLogDto>> GetSysOperLogList([FromQuery] SysOperLogDto dto)
@@ -33,9 +25,6 @@ namespace RuoYi.System.Controllers
             return await _sysOperLogService.GetDtoPagedListAsync(dto);
         }
 
-        /// <summary>
-        /// 删除 操作日志记录
-        /// </summary>
         [HttpDelete("{ids}")]
         [AppAuthorize("system:log:remove")]
         [RuoYi.System.Log(Title = "操作日志", BusinessType = BusinessType.DELETE)]
@@ -46,9 +35,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 删除 操作日志记录
-        /// </summary>
         [HttpDelete("clean")]
         [AppAuthorize("system:log:remove")]
         [RuoYi.System.Log(Title = "操作日志", BusinessType = BusinessType.CLEAN)]
@@ -58,9 +44,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success();
         }
 
-        /// <summary>
-        /// 导出 操作日志记录
-        /// </summary>
         [HttpPost("export")]
         [AppAuthorize("system:log:export")]
         [RuoYi.System.Log(Title = "操作日志", BusinessType = BusinessType.EXPORT)]

@@ -1,4 +1,4 @@
-﻿namespace RuoYi.Common.Constants
+namespace RuoYi.Common.Constants
 {
     public class AppConstants
     {

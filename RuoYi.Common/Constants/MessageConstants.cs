@@ -1,4 +1,4 @@
-﻿namespace RuoYi.Common.Constants
+namespace RuoYi.Common.Constants
 {
     public class MessageConstants
     {
@@ -6,9 +6,6 @@
         public const string Required = "* 必须填写";
         public const string Login_Blocked = "很遗憾，访问IP已被列入系统黑名单";
         public const string Captcha_Invalid = "验证码错误或已失效";
-        //public const string Wrong_Captcha = "验证码错误";
-        //public const string User_Captcha_Expire = "验证码已失效";
-        //public const string User_Captcha_Error = "验证码错误";
         public const string User_Passwrod_Not_Match = "用户不存在/密码错误";
         public const string User_Deleted = "对不起，您的账号已被删除";
         public const string User_Blocked = "用户已封禁，请联系管理员";

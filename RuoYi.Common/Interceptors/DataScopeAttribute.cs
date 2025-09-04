@@ -1,4 +1,4 @@
-﻿using AspectCore.DynamicProxy;
+using AspectCore.DynamicProxy;
 using RuoYi.Common.Constants;
 using RuoYi.Common.Utils;
 using RuoYi.Data;
@@ -11,9 +11,6 @@ using System.Text;
 
 namespace RuoYi.Common.Interceptors
 {
-    // https://github.com/dotnetcore/AspectCore-Framework/blob/master/docs/1.%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md
-    // https://www.cnblogs.com/twinhead/p/9229062.html
-    // 在要被拦截的方法上标注 DataScopeAttribute, 类需要是public类，方法如果需要拦截就是[虚方法]，支持异步方法，因为动态代理是动态生成被代理的类的动态子类实现的。
     public class DataScopeAttribute : AbstractInterceptorAttribute
     {
         public string? DeptAlias { get; set; }
@@ -25,13 +22,10 @@ namespace RuoYi.Common.Interceptors
             try
             {
                 Console.WriteLine("Before service call");
-
-                // 获取当前的用户
                 LoginUser loginUser = SecurityUtils.GetLoginUser();
                 if (loginUser != null)
                 {
                     SysUserDto currentUser = loginUser.User;
-                    // 如果是超级管理员，则不过滤数据
                     if (currentUser != null && !SecurityUtils.IsAdmin(currentUser))
                     {
                         string permission = StringUtils.DefaultIfEmpty(Permission, PermissionContextHolder.GetContext());
@@ -45,7 +39,6 @@ namespace RuoYi.Common.Interceptors
             {
                 Console.WriteLine("Service threw an exception!");
                 Log.Error("DataScope Error", ex);
-                //throw;
             }
             finally
             {
@@ -57,7 +50,6 @@ namespace RuoYi.Common.Interceptors
         {
             StringBuilder sqlString = new StringBuilder();
             List<string> conditions = new List<string>();
-
             foreach (SysRoleDto role in user.Roles ?? new List<SysRoleDto>())
             {
                 var dataScope = role.DataScope ?? DataScope.Custom;
@@ -65,11 +57,12 @@ namespace RuoYi.Common.Interceptors
                 {
                     continue;
                 }
-                if (StringUtils.IsNotEmpty(permission) && role.Permissions.IsNotEmpty()
-                        && !StringUtils.ContainsAny(role.Permissions, permission))
+
+                if (StringUtils.IsNotEmpty(permission) && role.Permissions.IsNotEmpty() && !StringUtils.ContainsAny(role.Permissions, permission))
                 {
                     continue;
                 }
+
                 if (dataScope == DataScope.All)
                 {
                     sqlString = new StringBuilder();
@@ -96,14 +89,13 @@ namespace RuoYi.Common.Interceptors
                     }
                     else
                     {
-                        // 数据权限为仅本人且没有userAlias别名不查询任何数据
                         sqlString.Append(" OR {deptAlias}.dept_id = 0 ");
                     }
                 }
+
                 conditions.Add(dataScope);
             }
 
-            // 多角色情况下，所有角色都不包含传递过来的权限字符，这个时候sqlString也会为空，所以要限制一下,不查询任何数据
             if (conditions.IsEmpty())
             {
                 sqlString.Append($" OR {deptAlias}.dept_id = 0 ");

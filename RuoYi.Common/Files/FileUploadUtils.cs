@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using RuoYi.Common.Constants;
 using RuoYi.Common.Utils;
 using RuoYi.Framework;
@@ -11,24 +11,10 @@ namespace RuoYi.Common.Files
 {
     public static class FileUploadUtils
     {
-
-        /// <summary>
-        /// 默认大小 50M
-        /// </summary>
         public static long DEFAULT_MAX_SIZE = 50 * 1024 * 1024;
-
-        /// <summary>
-        /// 默认的文件名最大长度 100
-        /// </summary>
         public static int DEFAULT_FILE_NAME_LENGTH = 100;
-
-        /**
-         * 默认上传的地址
-         */
         private static string DefaultBaseDir = RyApp.RuoYiConfig.Profile ?? "";
-
-        #region Directory
-
+#region Directory
         public static void CreateDirectory(string path)
         {
             if (!Directory.Exists(path))
@@ -47,35 +33,23 @@ namespace RuoYi.Common.Files
         public static string GetResourcePhysicalPath(string relativePath)
         {
             relativePath = relativePath.TrimStart('/').TrimStart('\\');
-            relativePath = relativePath.ToLower().StartsWith(AppConstants.StaticFileFolder.ToLower())
-                ? relativePath
-                : Path.Combine(AppConstants.StaticFileFolder, relativePath);
-
+            relativePath = relativePath.ToLower().StartsWith(AppConstants.StaticFileFolder.ToLower()) ? relativePath : Path.Combine(AppConstants.StaticFileFolder, relativePath);
             return GetPhysicalPath(relativePath);
         }
 
         public static string GetPhysicalPath(string relativePath)
         {
             relativePath = relativePath.TrimStart('/').TrimStart('\\');
-
             return Path.Combine(App.WebHostEnvironment.ContentRootPath, relativePath);
         }
 
-        #endregion
-
-        #region Upload
+#endregion
+#region Upload
         public static async Task<string> UploadAsync(IFormFile file)
         {
             return await UploadAsync(file, DefaultBaseDir, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION);
         }
 
-        /// <summary>
-        /// 文件上传
-        /// </summary>
-        /// <param name="file">文件</param>
-        /// <param name="subDirectory">子路径</param>
-        /// <param name="allowedExtension">允许上传的文件类型</param>
-        /// <returns>文件相对路径</returns>
         public static async Task<string> UploadAsync(IFormFile file, string subDirectory, string[] allowedExtension)
         {
             int fileNameLength = file.FileName.Length;
@@ -85,37 +59,24 @@ namespace RuoYi.Common.Files
             }
 
             AssertAllowed(file, allowedExtension);
-
-            // 当前文件物理路径
             var physicalPath = GetResourcePhysicalPath(subDirectory);
-
             string fileName = ExtractFilename(file);
             string filePath = Path.Combine(physicalPath, fileName);
-
-            // 当前文件目录
             string folderPath = Directory.GetParent(filePath)?.FullName;
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
-
             using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
-
             var relativePath = Path.Combine(subDirectory, fileName);
             return relativePath;
         }
 
-        /// <summary>
-        /// 编码文件名
-        /// </summary>
         public static string ExtractFilename(IFormFile file)
         {
             var baseName = Path.GetFileNameWithoutExtension(file.Name);
             return $"{baseName}_{Guid.NewGuid():N}.{GetExtension(file)}";
         }
 
-        /// <summary>
-        /// 文件大小校验
-        /// </summary>
         public static void AssertAllowed(IFormFile file, string[] allowedExtension)
         {
             long size = file.Length;
@@ -142,12 +103,10 @@ namespace RuoYi.Common.Files
                     return true;
                 }
             }
+
             return false;
         }
 
-        /// <summary>
-        /// 获取文件名的后缀
-        /// </summary>
         public static string GetExtension(IFormFile file)
         {
             string extension = Path.GetExtension(file.FileName);
@@ -157,24 +116,19 @@ namespace RuoYi.Common.Files
             }
             else
             {
-                // 去除 后缀前的点, 如: .jpg -> jpg
                 extension = extension.Substring(1, extension.Length - 1);
             }
+
             return extension;
         }
 
-        #endregion
-
-        #region Download
-
+#endregion
+#region Download
         public static (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory)
         {
             var zipName = $"archive-{DateTime.Now.ToYmdHms()}.zip";
-
-            // 文件物理路径
             var physicalPath = GetResourcePhysicalPath(subDirectory);
             var files = Directory.GetFiles(physicalPath).ToList();
-
             using (var memoryStream = new MemoryStream())
             {
                 using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
@@ -182,7 +136,6 @@ namespace RuoYi.Common.Files
                     files.ForEach(filePath =>
                     {
                         var entry = archive.CreateEntry(Path.GetFileName(filePath));
-
                         using var stream = entry.Open();
                         var buffer = File.ReadAllBytes(filePath);
                         stream.Write(buffer, 0, buffer.Length);
@@ -196,19 +149,16 @@ namespace RuoYi.Common.Files
         public static (string fileType, byte[] byteData, string name) DownloadFile(string relativePath)
         {
             var data = ReadFile(relativePath);
-
             var fName = Path.GetFileName(relativePath);
-
             return ("application/octet-stream", data, fName);
         }
 
         public static string SizeConverter(long bytes)
         {
-            var fileSize = new decimal(bytes);
-            var kilobyte = new decimal(1024);
-            var megabyte = new decimal(1024 * 1024);
-            var gigabyte = new decimal(1024 * 1024 * 1024);
-
+            var fileSize = new decimal (bytes);
+            var kilobyte = new decimal (1024);
+            var megabyte = new decimal (1024 * 1024);
+            var gigabyte = new decimal (1024 * 1024 * 1024);
             return fileSize switch
             {
                 var _ when fileSize < kilobyte => $"Less then 1KB",
@@ -225,7 +175,6 @@ namespace RuoYi.Common.Files
             var data = File.ReadAllBytes(physicalPath);
             return data;
         }
-
-        #endregion
+#endregion
     }
 }

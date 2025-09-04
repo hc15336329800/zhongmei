@@ -5,9 +5,6 @@ using RuoYi.System.Services;
 
 namespace RuoYi.System.Controllers
 {
-    /// <summary>
-    /// 角色信息表
-    /// </summary>
     [ApiDescriptionSettings("System")]
     [Route("system/role")]
     public class SysRoleController : ControllerBase
@@ -18,13 +15,7 @@ namespace RuoYi.System.Controllers
         private readonly SysRoleService _sysRoleService;
         private readonly SysDeptService _sysDeptService;
         private readonly SysPermissionService _sysPermissionService;
-
-        public SysRoleController(ILogger<SysRoleController> logger,
-            TokenService tokenService,
-            SysUserService sysUserService,
-            SysRoleService sysRoleService,
-            SysDeptService sysDeptService,
-            SysPermissionService sysPermissionService)
+        public SysRoleController(ILogger<SysRoleController> logger, TokenService tokenService, SysUserService sysUserService, SysRoleService sysRoleService, SysDeptService sysDeptService, SysPermissionService sysPermissionService)
         {
             _logger = logger;
             _tokenService = tokenService;
@@ -34,9 +25,6 @@ namespace RuoYi.System.Controllers
             _sysPermissionService = sysPermissionService;
         }
 
-        /// <summary>
-        /// 查询角色信息表列表
-        /// </summary>
         [HttpGet("list")]
         [AppAuthorize("system:role:list")]
         public async Task<SqlSugarPagedList<SysRoleDto>> GetSysRoleList([FromQuery] SysRoleDto dto)
@@ -44,9 +32,6 @@ namespace RuoYi.System.Controllers
             return await _sysRoleService.GetPagedRoleListAsync(dto);
         }
 
-        /// <summary>
-        /// 获取 角色信息表 详细信息
-        /// </summary>
         [HttpGet("{id}")]
         [AppAuthorize("system:role:query")]
         public async Task<AjaxResult> Get(long id)
@@ -56,9 +41,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 新增 角色信息表
-        /// </summary>
         [HttpPost("")]
         [AppAuthorize("system:role:add")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -78,9 +60,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 修改 角色信息表
-        /// </summary>
         [HttpPut("")]
         [AppAuthorize("system:role:edit")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -97,10 +76,8 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error($"修改角色'{role.RoleName}'失败，角色权限已存在");
             };
-
             if (await _sysRoleService.UpdateRoleAsync(role) > 0)
             {
-                // 更新缓存用户权限
                 LoginUser loginUser = SecurityUtils.GetLoginUser();
                 if (loginUser.User != null && !SecurityUtils.IsAdmin(loginUser.User))
                 {
@@ -108,15 +85,13 @@ namespace RuoYi.System.Controllers
                     loginUser.User = await _sysUserService.GetDtoByUsernameAsync(loginUser.User.UserName!);
                     _tokenService.SetLoginUser(loginUser);
                 }
+
                 return AjaxResult.Success();
             }
 
             return AjaxResult.Error("修改角色'" + role.RoleName + "'失败，请联系管理员");
         }
 
-        /// <summary>
-        /// 修改保存数据权限
-        /// </summary>
         [HttpPut("dataScope")]
         [Log(Title = "角色管理", BusinessType = BusinessType.UPDATE)]
         public async Task<AjaxResult> SaveDataScope([FromBody] SysRoleDto role)
@@ -127,9 +102,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 状态修改
-        /// </summary>
         [HttpPut("changeStatus")]
         [Log(Title = "角色管理", BusinessType = BusinessType.UPDATE)]
         public async Task<AjaxResult> ChangeStatus([FromBody] SysRoleDto role)
@@ -140,9 +112,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 删除 角色信息表
-        /// </summary>
         [HttpDelete("{ids}")]
         [AppAuthorize("system:role:remove")]
         [Log(Title = "角色管理", BusinessType = BusinessType.DELETE)]
@@ -152,9 +121,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 导出 角色信息表
-        /// </summary>
         [HttpPost("export")]
         [AppAuthorize("system:role:export")]
         [Log(Title = "角色管理", BusinessType = BusinessType.EXPORT)]
@@ -164,9 +130,6 @@ namespace RuoYi.System.Controllers
             await ExcelUtils.ExportAsync(App.HttpContext.Response, list);
         }
 
-        /// <summary>
-        /// 获取角色选择框列表
-        /// </summary>
         [HttpPost("optionselect")]
         [AppAuthorize("system:role:query")]
         public async Task<AjaxResult> OptionSelect()
@@ -175,9 +138,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 查询已分配用户角色列表
-        /// </summary>
         [HttpGet("authUser/allocatedList")]
         [AppAuthorize("system:role:list")]
         public async Task<SqlSugarPagedList<SysUserDto>> GetAllocatedList([FromQuery] SysUserDto dto)
@@ -185,9 +145,6 @@ namespace RuoYi.System.Controllers
             return await _sysUserService.GetPagedAllocatedListAsync(dto);
         }
 
-        /// <summary>
-        /// 查询未分配用户角色列表
-        /// </summary>
         [HttpGet("authUser/unallocatedList")]
         [AppAuthorize("system:role:list")]
         public async Task<SqlSugarPagedList<SysUserDto>> GetUnallocatedList([FromQuery] SysUserDto dto)
@@ -195,9 +152,6 @@ namespace RuoYi.System.Controllers
             return await _sysUserService.GetPagedUnallocatedListAsync(dto);
         }
 
-        /// <summary>
-        /// 取消授权用户
-        /// </summary>
         [HttpPut("authUser/cancel")]
         [AppAuthorize("system:role:edit")]
         [Log(Title = "角色管理", BusinessType = BusinessType.GRANT)]
@@ -207,9 +161,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 批量取消授权用户
-        /// </summary>
         [HttpPut("authUser/cancelAll")]
         [AppAuthorize("system:role:edit")]
         [Log(Title = "角色管理", BusinessType = BusinessType.GRANT)]
@@ -219,9 +170,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 批量选择用户授权
-        /// </summary>
         [HttpPut("authUser/selectAll")]
         [AppAuthorize("system:role:edit")]
         public async Task<AjaxResult> SaveAuthUserAll([FromQuery] SysUserRoleDto dto)
@@ -231,9 +179,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 获取对应角色部门树列表
-        /// </summary>
         [HttpGet("deptTree/{roleId}")]
         public async Task<AjaxResult> GetDeptTree(long roleId)
         {

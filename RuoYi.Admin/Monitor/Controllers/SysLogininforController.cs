@@ -8,26 +8,18 @@ using System.IO;
 
 namespace RuoYi.System.Controllers
 {
-    /// <summary>
-    /// 系统访问记录
-    /// </summary>
     [ApiDescriptionSettings("Monitor")]
     [Route("monitor/logininfor")]
     public class SysLogininforController : ControllerBase
     {
         private readonly ILogger<SysLogininforController> _logger;
         private readonly SysLogininforService _sysLogininforService;
-                
-        public SysLogininforController(ILogger<SysLogininforController> logger,
-            SysLogininforService sysLogininforService)
+        public SysLogininforController(ILogger<SysLogininforController> logger, SysLogininforService sysLogininforService)
         {
             _logger = logger;
             _sysLogininforService = sysLogininforService;
         }
 
-        /// <summary>
-        /// 查询系统访问记录列表
-        /// </summary>
         [HttpGet("list")]
         [AppAuthorize("system:logininfor:list")]
         public async Task<SqlSugarPagedList<SysLogininforDto>> GetSysLogininforList([FromQuery] SysLogininforDto dto)
@@ -35,9 +27,6 @@ namespace RuoYi.System.Controllers
             return await _sysLogininforService.GetDtoPagedListAsync(dto);
         }
 
-        /// <summary>
-        /// 获取 系统访问记录 详细信息
-        /// </summary>
         [HttpGet("")]
         [HttpGet("{id}")]
         [AppAuthorize("system:logininfor:query")]
@@ -47,9 +36,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 新增 系统访问记录
-        /// </summary>
         [HttpPost("")]
         [AppAuthorize("system:logininfor:add")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -60,9 +46,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 修改 系统访问记录
-        /// </summary>
         [HttpPut("")]
         [AppAuthorize("system:logininfor:edit")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -73,9 +56,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 删除 系统访问记录
-        /// </summary>
         [HttpDelete("{ids}")]
         [AppAuthorize("system:logininfor:remove")]
         [RuoYi.System.Log(Title = "系统访问记录", BusinessType = BusinessType.DELETE)]
@@ -86,9 +66,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 导入 系统访问记录
-        /// </summary>
         [HttpPost("import")]
         [AppAuthorize("system:logininfor:import")]
         [RuoYi.System.Log(Title = "系统访问记录", BusinessType = BusinessType.IMPORT)]
@@ -100,9 +77,6 @@ namespace RuoYi.System.Controllers
             await _sysLogininforService.ImportDtoBatchAsync(list);
         }
 
-        /// <summary>
-        /// 导出 系统访问记录
-        /// </summary>
         [HttpPost("export")]
         [AppAuthorize("system:logininfor:export")]
         [RuoYi.System.Log(Title = "系统访问记录", BusinessType = BusinessType.EXPORT)]

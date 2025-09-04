@@ -1,4 +1,4 @@
-﻿namespace RuoYi.Common.Utils
+namespace RuoYi.Common.Utils
 {
     public static class LogUtils
     {
@@ -8,6 +8,7 @@
             {
                 msg = "";
             }
+
             return "[" + msg.ToString() + "]";
         }
     }

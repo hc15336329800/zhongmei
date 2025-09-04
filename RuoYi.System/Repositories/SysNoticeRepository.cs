@@ -1,10 +1,4 @@
 namespace RuoYi.System.Repositories;
-
-/// <summary>
-///  通知公告表 Repository
-///  author ruoyi
-///  date   2023-09-04 17:50:00
-/// </summary>
 public class SysNoticeRepository : BaseRepository<SysNotice, SysNoticeDto>
 {
     public SysNoticeRepository(ISqlSugarRepository<SysNotice> sqlSugarRepository)
@@ -14,9 +8,7 @@ public class SysNoticeRepository : BaseRepository<SysNotice, SysNoticeDto>
 
     public override ISugarQueryable<SysNotice> Queryable(SysNoticeDto dto)
     {
-        return Repo.AsQueryable()
-            .WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId)
-        ;
+        return Repo.AsQueryable().WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId);
     }
 
     public override ISugarQueryable<SysNoticeDto> DtoQueryable(SysNoticeDto dto)
@@ -24,21 +16,11 @@ public class SysNoticeRepository : BaseRepository<SysNotice, SysNoticeDto>
         var dbType = Repo.Context.CurrentConnectionConfig.DbType;
         if (dbType == DbType.MySql)
         {
-            return Repo.AsQueryable()
-                .WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId)
-                .Select((t) => new SysNoticeDto
-                {
-                    NoticeContent = SqlFunc.MappingColumn(t.NoticeContent, " cast(notice_content as char) ")
-                }, true);
+            return Repo.AsQueryable().WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId).Select((t) => new SysNoticeDto { NoticeContent = SqlFunc.MappingColumn(t.NoticeContent, " cast(notice_content as char) ") }, true);
         }
         else
         {
-            return Repo.AsQueryable()
-                .WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId)
-                .Select((t) => new SysNoticeDto
-                {
-                    NoticeContent = t.NoticeContent
-                }, true);
+            return Repo.AsQueryable().WhereIF(dto.NoticeId > 0, (t) => t.NoticeId == dto.NoticeId).Select((t) => new SysNoticeDto { NoticeContent = t.NoticeContent }, true);
         }
     }
 }

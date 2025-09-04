@@ -1,4 +1,4 @@
-﻿using RuoYi.Framework;
+using RuoYi.Framework;
 using System.Reflection;
 
 namespace RuoYi.Admin

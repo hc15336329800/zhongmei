@@ -1,14 +1,11 @@
-﻿using RuoYi.Framework;
+using RuoYi.Framework;
 
 namespace RuoYi.Admin
 {
     public class SystemService : ITransient
     {
-        //private readonly ISqlSugarRepository _repository;
-
         public SystemService()
         {
-            //_repository = repository;
         }
 
         public string GetDescription()

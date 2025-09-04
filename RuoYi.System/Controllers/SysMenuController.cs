@@ -5,26 +5,18 @@ using RuoYi.System.Services;
 
 namespace RuoYi.System.Controllers
 {
-    /// <summary>
-    /// 菜单权限表
-    /// </summary>
     [ApiDescriptionSettings("System")]
     [Route("system/menu")]
     public class SysMenuController : ControllerBase
     {
         private readonly ILogger<SysMenuController> _logger;
         private readonly SysMenuService _sysMenuService;
-
-        public SysMenuController(ILogger<SysMenuController> logger,
-            SysMenuService sysMenuService)
+        public SysMenuController(ILogger<SysMenuController> logger, SysMenuService sysMenuService)
         {
             _logger = logger;
             _sysMenuService = sysMenuService;
         }
 
-        /// <summary>
-        /// 查询菜单权限表列表
-        /// </summary>
         [HttpGet("list")]
         [AppAuthorize("system:menu:list")]
         public async Task<AjaxResult> SysMenuListAsync([FromQuery] SysMenuDto dto)
@@ -33,9 +25,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 获取 菜单权限表 详细信息
-        /// </summary>
         [HttpGet("{menuId}")]
         [AppAuthorize("system:menu:query")]
         public async Task<AjaxResult> Get(long? menuId)
@@ -44,9 +33,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 获取菜单下拉树列表
-        /// </summary>
         [HttpGet("treeselect")]
         public async Task<AjaxResult> Treeselect([FromQuery] SysMenuDto dto)
         {
@@ -55,9 +41,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 加载对应角色菜单列表树
-        /// </summary>
         [HttpGet("roleMenuTreeselect/{roleId}")]
         public async Task<AjaxResult> RoleMenuTreeselectAsync(long roleId)
         {
@@ -68,9 +51,6 @@ namespace RuoYi.System.Controllers
             return ajax;
         }
 
-        /// <summary>
-        /// 新增 菜单权限表
-        /// </summary>
         [HttpPost("")]
         [AppAuthorize("system:menu:add")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -90,9 +70,6 @@ namespace RuoYi.System.Controllers
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 修改 菜单权限表
-        /// </summary>
         [HttpPut("")]
         [AppAuthorize("system:menu:edit")]
         [TypeFilter(typeof(RuoYi.Framework.DataValidation.DataValidationFilter))]
@@ -111,13 +88,11 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error("修改菜单'" + menu.MenuName + "'失败，上级菜单不能选择自己");
             }
+
             var data = await _sysMenuService.UpdateAsync(menu);
             return AjaxResult.Success(data);
         }
 
-        /// <summary>
-        /// 删除 菜单权限表
-        /// </summary>
         [HttpDelete("{menuId}")]
         [AppAuthorize("system:menu:remove")]
         [RuoYi.System.Log(Title = "菜单管理", BusinessType = BusinessType.DELETE)]
@@ -127,10 +102,12 @@ namespace RuoYi.System.Controllers
             {
                 return AjaxResult.Error("存在子菜单,不允许删除");
             }
+
             if (_sysMenuService.CheckMenuExistRole(menuId))
             {
                 return AjaxResult.Error("菜单已分配,不允许删除");
             }
+
             var data = await _sysMenuService.DeleteAsync(menuId);
             return AjaxResult.Success(data);
         }

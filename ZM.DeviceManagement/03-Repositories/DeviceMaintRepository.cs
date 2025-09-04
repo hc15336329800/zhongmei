@@ -6,11 +6,6 @@ using ZM.Device.Entities;
 
 namespace ZM.Device.Repositories
 {
-    /// <summary>
-    ///  保养记录表 Repository
-    ///  author ruoyi.net
-    ///  date   2025-04-01 16:06:17
-    /// </summary>
     public class DeviceMaintRepository : BaseRepository<DeviceMaint, DeviceMaintDto>
     {
         public DeviceMaintRepository(ISqlSugarRepository<DeviceMaint> sqlSugarRepository)
@@ -20,25 +15,12 @@ namespace ZM.Device.Repositories
 
         public override ISugarQueryable<DeviceMaint> Queryable(DeviceMaintDto dto)
         {
-            return Repo.AsQueryable()
-                .WhereIF(dto.Id > 0, (t) => t.Id == dto.Id)
-            ;
+            return Repo.AsQueryable().WhereIF(dto.Id > 0, (t) => t.Id == dto.Id);
         }
 
         public override ISugarQueryable<DeviceMaintDto> DtoQueryable(DeviceMaintDto dto)
         {
-            return Repo.AsQueryable()
-                .WhereIF(dto.Id > 0, (t) => t.Id == dto.Id)
-                .Select((t) => new DeviceMaintDto
-                {
-                     Id = t.Id 
-                }, true);
+            return Repo.AsQueryable().WhereIF(dto.Id > 0, (t) => t.Id == dto.Id).Select((t) => new DeviceMaintDto { Id = t.Id }, true);
         }
-
-
-       
-
-
-
     }
 }

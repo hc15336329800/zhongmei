@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RuoYi.Admin.Authorization
@@ -9,7 +9,6 @@ namespace RuoYi.Admin.Authorization
         {
             var builder = services.AddJwt<JwtHandler>(enableGlobalAuthorize: enableGlobalAuthorize);
             services.AddScoped<IAuthorizationMiddlewareResultHandler, AuthorizationMiddlewareResultHandler>();
-
             return builder;
         }
     }
