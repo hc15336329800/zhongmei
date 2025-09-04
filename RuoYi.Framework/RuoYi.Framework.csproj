@@ -25,7 +25,8 @@
     <PackageProjectUrl>https://your-private-repo-url</PackageProjectUrl>
     <RepositoryUrl>https://your-private-repo-url</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
   </PropertyGroup>
 
 
